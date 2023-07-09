@@ -29,7 +29,6 @@ public class Game{
     private boolean Quarto = false;
     private final String ADDRESS;
     private final int PORT;
-    //public boolean frameCreated=false;
     public String P1output;
     public String P2output;
     public String PlayerName;
@@ -62,21 +61,17 @@ public class Game{
         PlayerName = "";
         String input = "";
 
-        // 通信開始
         try {
-            // 既にサーバーが立っていたら接続
             InetAddress addr = InetAddress.getByName(ADDRESS);
             System.out.println("Searching server... (addr=" + addr + ", port=" + PORT + ")");
             socket = new Socket(addr, PORT);
             System.out.println("Server found.");
         } catch (IOException e) {
-            // 見つからなかった場合はサーバーを立てる
             System.out.println("Server not found. Launching server...");
             ServerSocket s = new ServerSocket(PORT);
             System.out.println("Started: " + s);
             socket = s.accept();
 
-            // サーバー側で先攻後攻を決める
             Random random = new Random();
             PlayerName = "Player " + (random.nextInt(2) + 1);
         }
@@ -84,13 +79,11 @@ public class Game{
         Scanner scanner = new Scanner(System.in);
         try {
             System.out.println("socket=" + socket);
-            // データ受信用バッファの設定
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(
                             socket.getInputStream()
                     )
             );
-            // 送信バッファの設定
             PrintWriter out = new PrintWriter(
                     new BufferedWriter(
                             new OutputStreamWriter(
@@ -99,10 +92,8 @@ public class Game{
                     ), true
             );
 
-            // 盤面を表示
             print();
 
-            // 先攻後攻の情報を通信
             if (PlayerName.equals("")) {
                 PlayerName = in.readLine();
             } else {
